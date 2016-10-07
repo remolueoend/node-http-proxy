@@ -22,14 +22,14 @@ declare class Server implements NodeJS.EventEmitter {
      * @param req - Client request.
      * @param res - Client response.
      */
-    public web(req: http.IncomingMessage, res: http.ServerResponse);
+    public web(req: http.IncomingMessage, res: http.ServerResponse): void;
     /**
      * Used for proxying regular HTTP(S) requests
      * @param req - Client request.
      * @param res - Client response.
      * @param options - Additionnal options.
      */
-    public web(req: http.IncomingMessage, res: http.ServerResponse, options: Server.ServerOptions);
+    public web(req: http.IncomingMessage, res: http.ServerResponse, options: Server.ServerOptions): void;
 
     /**
      * Used for proxying regular HTTP(S) requests
@@ -37,7 +37,7 @@ declare class Server implements NodeJS.EventEmitter {
      * @param socket - Client socket.
      * @param head - Client head.
      */
-    public ws(req: http.IncomingMessage, socket: any, head: any);
+    public ws(req: http.IncomingMessage, socket: any, head: any): void;
     /**
      * Used for proxying regular HTTP(S) requests
      * @param req - Client request.
@@ -45,22 +45,22 @@ declare class Server implements NodeJS.EventEmitter {
      * @param head - Client head.
      * @param options - Additionnal options.
      */
-    public ws(req: http.IncomingMessage, socket: any, head: any, options: Server.ServerOptions);
+    public ws(req: http.IncomingMessage, socket: any, head: any, options: Server.ServerOptions): void;
 
     /**
      * A function that wraps the object in a webserver, for your convenience
      * @param port - Port to listen on
      */
-    public listen(port: number);
+    public listen(port: number): Server;
 
     /**
      * A function that closes the inner webserver and stops listening on given port
      */
-    public close();
+    public close(): void;
     /**
      * A function that closes the inner webserver and stops listening on given port
      */
-    public close(callback: Function);
+    public close(callback: Function): void;
 
     /**
      * Creates the proxy server.
@@ -100,6 +100,7 @@ declare class Server implements NodeJS.EventEmitter {
 
     addListener(event: string, listener: Function): this;
     on(event: string, listener: Function): this;
+    on(event: 'error', listener: (error: Error) => void): this;
     once(event: string, listener: Function): this;
     removeListener(event: string, listener: Function): this;
     removeAllListeners(event?: string): this;
