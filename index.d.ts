@@ -5,8 +5,9 @@
 
 import * as http from "http";
 import * as https from "https";
+import * as events from 'events';
 
-declare class Server implements NodeJS.EventEmitter {
+declare class Server extends events.EventEmitter {
     /**
      * Creates the proxy server with specified options.
      */
