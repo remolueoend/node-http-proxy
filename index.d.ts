@@ -7,6 +7,10 @@ import * as http from "http";
 import * as https from "https";
 import * as events from 'events';
 
+declare interface ErrorCallback {
+    (err: Error, req: http.IncomingMessage, res: http.ServerResponse, target: string): void;
+}
+
 declare class Server extends events.EventEmitter {
     /**
      * Creates the proxy server with specified options.
@@ -31,6 +35,14 @@ declare class Server extends events.EventEmitter {
      * @param options - Additionnal options.
      */
     public web(req: http.IncomingMessage, res: http.ServerResponse, options: Server.ServerOptions): void;
+    /**
+     * Used for proxying regular HTTP(S) requests
+     * @param req - Client request.
+     * @param res - Client response.
+     * @param options - Additionnal options.
+     * @param 
+     */
+    public web(req: http.IncomingMessage, res: http.ServerResponse, options: Server.ServerOptions, callback: ErrorCallback): void;
 
     /**
      * Used for proxying regular HTTP(S) requests
@@ -101,7 +113,7 @@ declare class Server extends events.EventEmitter {
 
     addListener(event: string, listener: Function): this;
     on(event: string, listener: Function): this;
-    on(event: 'error', listener: (error: Error) => void): this;
+    on(event: 'error', listener: ErrorCallback): this;
     once(event: string, listener: Function): this;
     removeListener(event: string, listener: Function): this;
     removeAllListeners(event?: string): this;
