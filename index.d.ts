@@ -3,12 +3,16 @@
 // Definitions by: Maxime LUCE <https://github.com/SomaticIT/>
 // Definitions: https://github.com/typed-contrib/node-http-proxy
 
+import * as net from "net";
 import * as http from "http";
 import * as https from "https";
 import * as events from 'events';
+import * as url from 'url';
+
+declare type ProxyTargetUrl = string | url.Url;
 
 declare interface ErrorCallback {
-    (err: Error, req: http.IncomingMessage, res: http.ServerResponse, target: string): void;
+    (err: Error, req: http.IncomingMessage, res: http.ServerResponse, target?: ProxyTargetUrl): void;
 }
 
 declare class Server extends events.EventEmitter {
@@ -114,6 +118,14 @@ declare class Server extends events.EventEmitter {
     addListener(event: string, listener: Function): this;
     on(event: string, listener: Function): this;
     on(event: 'error', listener: ErrorCallback): this;
+    on(event: 'start', listener: (req: http.IncomingMessage, res: http.ServerResponse, target: ProxyTargetUrl) => void): this;
+    on(event: 'proxyReq', listener: (proxyReq: http.ClientRequest, req: http.IncomingMessage, res: http.ServerResponse, options: Server.ServerOptions) => void): this;
+    on(event: 'proxyRes', listener: (proxyRes: http.IncomingMessage, req: http.IncomingMessage, res: http.ServerResponse) => void): this;
+    on(event: 'proxyReqWs', listener: (proxyReq: http.ClientRequest, req: http.IncomingMessage, socket: net.Socket, options: Server.ServerOptions, head: any) => void): this;
+    on(event: 'econnreset', listener: (err: Error, req: http.IncomingMessage, res: http.ServerResponse, target: ProxyTargetUrl) => void): this;
+    on(event: 'end', listener: (req: http.IncomingMessage, res: http.ServerResponse, proxyRes: http.IncomingMessage) => void): this;
+    on(event: 'close', listener: (proxyRes: http.IncomingMessage, proxySocket: net.Socket, proxyHead: any) => void): this;
+
     once(event: string, listener: Function): this;
     removeListener(event: string, listener: Function): this;
     removeAllListeners(event?: string): this;
